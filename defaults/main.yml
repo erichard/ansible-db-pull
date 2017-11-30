@@ -1,0 +1,16 @@
+---
+db_pull_remote_backup_path: /tmp/db-pull
+db_pull_local_backup_path: /tmp/db-pull
+db_pull_keep_backup: 5
+
+db_pull_remote_database_user: postgres
+db_pull_remote_database_host: localhost
+db_pull_remote_database_name: postgres
+db_pull_remote_database_password: root
+db_pull_remote_database_port: 5432
+
+db_pull_local_database_user: postgres
+db_pull_local_database_host: localhost
+db_pull_local_database_name: postgres
+db_pull_local_database_password: root
+db_pull_local_database_port: 5432

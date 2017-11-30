@@ -1,0 +1,55 @@
+- name: Ensure database dump folder exists
+  file:
+    path: "{{ db_pull_remote_backup_path }}"
+    state: directory
+- name: backup db server
+  shell: >
+    PGPASSWORD={{ db_pull_remote_database_password }} pg_dump -Fc \
+      -U {{ db_pull_remote_database_user }} \
+      -h {{ db_pull_remote_database_host }} \
+      -d {{ db_pull_remote_database_name }} \
+      -f {{ db_pull_remote_backup_path }}/{{ db_pull_remote_database_name }}-{{ ansible_date_time.iso8601 }}.dump
+- name: Ensure database dump folder exists
+  delegate_to: localhost
+  file:
+    path: "{{ db_pull_local_backup_path }}"
+    state: directory
+- name: Download backup
+  fetch:
+    src: "{{ db_pull_remote_backup_path }}/{{ db_pull_remote_database_name }}-{{ ansible_date_time.iso8601 }}.dump"
+    dest: "{{ db_pull_local_backup_path }}/{{ db_pull_remote_database_name }}.dump"
+    flat: yes
+- name: Remove local database
+  delegate_to: localhost
+  shell: >
+    PGPASSWORD={{ db_pull_local_database_password }} dropdb --if-exists \
+      -U {{ db_pull_local_database_user }} \
+      -h {{ db_pull_local_database_host }} \
+      {{ db_pull_local_database_name }}
+- name: Recreate local database
+  delegate_to: localhost
+  shell: >
+    PGPASSWORD={{ db_pull_local_database_password }} createdb \
+      -U {{ db_pull_local_database_user }} \
+      -h {{ db_pull_local_database_host }} \
+      {{ db_pull_local_database_name }}
+- name: Restore dump locally
+  delegate_to: localhost
+  shell: >
+    PGPASSWORD={{ db_pull_local_database_password }} pg_restore \
+      -U {{ db_pull_local_database_user }} \
+      -h {{ db_pull_local_database_host }} \
+      -d {{ db_pull_local_database_name }} \
+      --clean --if-exists --no-owner --no-acl \
+      {{ db_pull_local_backup_path }}/{{ db_pull_remote_database_name }}.dump
+- name: Find all backups
+  find:
+    paths: "{{ db_pull_remote_backup_path }}"
+    pattern: "{{ db_pull_remote_database_name }}-*"
+    file_type: file
+  register: olderBackups
+- name: keep only the most recent files
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ (olderBackups.files | sort(attribute='ctime'))[db_pull_keep_backup:] | list }}"
