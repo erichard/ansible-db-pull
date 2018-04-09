@@ -7,7 +7,7 @@
     paths: "{{ db_pull_local_backup_path }}"
     patterns: "{{ db_pull_remote_database_name }}.dump"
     age: "{{ db_pull_max_age }}"
-    register: local_dump
+  register: local_dump
 - name: backup db server
   shell: >
     PGPASSWORD={{ db_pull_remote_database_password }} pg_dump -Fc \
