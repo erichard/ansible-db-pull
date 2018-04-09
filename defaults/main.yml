@@ -14,3 +14,5 @@ db_pull_local_database_host: localhost
 db_pull_local_database_name: postgres
 db_pull_local_database_password: root
 db_pull_local_database_port: 5432
+
+db_pull_max_age: 1d
