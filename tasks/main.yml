@@ -3,6 +3,7 @@
     path: "{{ db_pull_remote_backup_path }}"
     state: directory
 - name: Find existing local dump
+  delegate_to: localhost
   find:
     paths: "{{ db_pull_local_backup_path }}"
     patterns: "{{ db_pull_remote_database_name }}.dump"
