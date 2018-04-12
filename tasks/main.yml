@@ -62,4 +62,4 @@
   file:
     path: "{{ item.path }}"
     state: absent
-  with_items: "{{ (olderBackups.files | sort(attribute='ctime'))[db_pull_keep_backup:] | list }}"
+  with_items: "{{ (olderBackups.files | sort(attribute='ctime', reverse=True))[db_pull_keep_backup:] | list }}"
