@@ -46,10 +46,13 @@
 - name: Restore dump locally
   delegate_to: localhost
   shell: >
-    PGPASSWORD={{ db_pull_local_database_password }} pg_restore \
+    PGPASSWORD={{ db_pull_local_database_password }} \
+    PGOPTIONS="-c maintenance_work_mem=128MB" \
+    pg_restore \
       -U {{ db_pull_local_database_user }} \
       -h {{ db_pull_local_database_host }} \
       -d {{ db_pull_local_database_name }} \
+      -j 4 \
       --clean --if-exists --no-owner --no-acl \
       {{ db_pull_local_backup_path }}/{{ db_pull_remote_database_name }}.dump
 - name: Find all backups
