@@ -1,0 +1,7 @@
+- name: Recreate local postgres database
+  delegate_to: localhost
+  shell: >
+    PGPASSWORD={{ db_pull_local_database_password }} createdb \
+      -U {{ db_pull_local_database_user }} \
+      -h {{ db_pull_local_database_host }} \
+      {{ db_pull_local_database_name }}

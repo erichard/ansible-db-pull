@@ -1,0 +1,9 @@
+- name: Restore postgres dump locally
+  delegate_to: localhost
+  shell: >
+    PGPASSWORD={{ db_pull_local_database_password }} pg_restore \
+      -U {{ db_pull_local_database_user }} \
+      -h {{ db_pull_local_database_host }} \
+      -d {{ db_pull_local_database_name }} \
+      --clean --if-exists --no-owner --no-acl \
+      {{ db_pull_local_backup_path }}/{{ db_pull_remote_database_name }}.dump
