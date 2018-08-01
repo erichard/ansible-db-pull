@@ -1,0 +1,9 @@
+- name: Restore mysql dump locally
+  delegate_to: localhost
+  shell: >
+    mysql \
+      -u {{ db_pull_local_database_user }} \
+      --password={{ db_pull_local_database_password }} \
+      -h {{ db_pull_local_database_host }} \
+      {{ db_pull_local_database_name }} \
+      < {{ db_pull_local_backup_path }}/{{ db_pull_remote_database_name }}.dump

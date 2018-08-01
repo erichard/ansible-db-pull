@@ -9,14 +9,7 @@
     patterns: "{{ db_pull_remote_database_name }}.dump"
     age: "{{ db_pull_max_age }}"
   register: local_dump
-- name: backup db server
-  shell: >
-    PGPASSWORD={{ db_pull_remote_database_password }} pg_dump -Fc \
-      -U {{ db_pull_remote_database_user }} \
-      -h {{ db_pull_remote_database_host }} \
-      -d {{ db_pull_remote_database_name }} \
-      -f {{ db_pull_remote_backup_path }}/{{ db_pull_remote_database_name }}-{{ ansible_date_time.iso8601 }}.dump
-  when: local_dump.matched == 0
+- include_tasks: "{{ db_pull_database_type }}/dump.yml"
 - name: Ensure database dump folder exists
   delegate_to: localhost
   file:
@@ -29,29 +22,9 @@
     dest: "{{ db_pull_local_backup_path }}/{{ db_pull_remote_database_name }}.dump"
     flat: yes
   when: local_dump.matched == 0
-- name: Remove local database
-  delegate_to: localhost
-  shell: >
-    PGPASSWORD={{ db_pull_local_database_password }} dropdb --if-exists \
-      -U {{ db_pull_local_database_user }} \
-      -h {{ db_pull_local_database_host }} \
-      {{ db_pull_local_database_name }}
-- name: Recreate local database
-  delegate_to: localhost
-  shell: >
-    PGPASSWORD={{ db_pull_local_database_password }} createdb \
-      -U {{ db_pull_local_database_user }} \
-      -h {{ db_pull_local_database_host }} \
-      {{ db_pull_local_database_name }}
-- name: Restore dump locally
-  delegate_to: localhost
-  shell: >
-    PGPASSWORD={{ db_pull_local_database_password }} pg_restore \
-      -U {{ db_pull_local_database_user }} \
-      -h {{ db_pull_local_database_host }} \
-      -d {{ db_pull_local_database_name }} \
-      --clean --if-exists --no-owner --no-acl \
-      {{ db_pull_local_backup_path }}/{{ db_pull_remote_database_name }}.dump
+- include_tasks: "{{ db_pull_database_type }}/drop.yml"
+- include_tasks: "{{ db_pull_database_type }}/create.yml"
+- include_tasks: "{{ db_pull_database_type }}/restore.yml"
 - name: Find all backups
   find:
     paths: "{{ db_pull_remote_backup_path }}"

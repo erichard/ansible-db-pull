@@ -1,12 +1,12 @@
 Ansible DB-pull role
 ====================
 
-Sync local PostgreSQL database with remote.
+Sync local PostgreSQL or MySQL database with remote.
 
 Requirements
 ------------
 
-The local system need to have `pg_dump` and `pg_reload` command.
+The local system need to have either `pg_dump` and `pg_reload` command or `mysql` and `mysqldump`.
 
 Role Variables
 --------------
@@ -29,6 +29,8 @@ db_pull_local_database_host: localhost
 db_pull_local_database_name: postgres
 db_pull_local_database_password: root
 db_pull_local_database_port: 5432
+
+db_pull_database_type: postgres
 ```
 
 Example Playbook
