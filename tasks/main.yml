@@ -10,6 +10,7 @@
     age: "{{ db_pull_max_age }}"
   register: local_dump
 - include_tasks: "{{ db_pull_database_type }}/dump.yml"
+  when: local_dump.matched == 0
 - name: Ensure database dump folder exists
   delegate_to: localhost
   file:
