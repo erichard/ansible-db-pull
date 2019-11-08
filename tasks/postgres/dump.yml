@@ -1,6 +1,6 @@
 - name: backup postgres db server
   shell: >
-    PGPASSWORD={{ db_pull_remote_database_password }} pg_dump -Fc \
+    PGPASSWORD="{{ db_pull_remote_database_password }}" pg_dump -Fc \
       -U {{ db_pull_remote_database_user }} \
       -h {{ db_pull_remote_database_host }} \
       -d {{ db_pull_remote_database_name }} \
