@@ -31,6 +31,8 @@ db_pull_local_database_password: root
 db_pull_local_database_port: 5432
 
 db_pull_database_type: postgres
+
+db_pull_skip_restore: false
 ```
 
 Example Playbook
