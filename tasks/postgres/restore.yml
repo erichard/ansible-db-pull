@@ -1,5 +1,6 @@
 - name: Restore postgres dump locally
   delegate_to: localhost
+  become: false
   shell: >
     PGPASSWORD="{{ db_pull_local_database_password }}" pg_restore \
       -U {{ db_pull_local_database_user }} \

@@ -1,5 +1,6 @@
 - name: Restore mysql dump locally
   delegate_to: localhost
+  become: false
   shell: >
     mysql \
       -u {{ db_pull_local_database_user }} \

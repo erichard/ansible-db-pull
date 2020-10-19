@@ -1,5 +1,6 @@
 - name: Remove local postgres database
   delegate_to: localhost
+  become: false
   shell: >
     PGPASSWORD="{{ db_pull_local_database_password }}" dropdb --if-exists \
       -U {{ db_pull_local_database_user }} \
