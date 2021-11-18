@@ -4,5 +4,6 @@
       -u {{ db_pull_remote_database_user }} \
       --password={{ db_pull_remote_database_password }} \
       -h {{ db_pull_remote_database_host }} \
+      -P {{ db_pull_remote_database_port }} \
       {{ db_pull_remote_database_name }} \
       > {{ db_pull_remote_backup_path }}/{{ db_pull_remote_database_name }}-{{ ansible_date_time.iso8601 }}.dump
