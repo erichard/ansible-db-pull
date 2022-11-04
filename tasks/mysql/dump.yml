@@ -3,6 +3,8 @@
     mysqldump \
       -u {{ db_pull_remote_database_user }} \
       --password={{ db_pull_remote_database_password }} \
+      {{ ['--ignore-table']|product(db_pull_exclude_table)|map('join', ' ')|join(' ') }} \
+      {{ ['--ignore-table-data']|product(db_pull_exclude_table)|map('join', ' ')|join(' ') }} \
       -h {{ db_pull_remote_database_host }} \
       -P {{ db_pull_remote_database_port }} \
       {{ db_pull_remote_database_name }} \

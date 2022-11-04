@@ -5,4 +5,6 @@
       -h {{ db_pull_remote_database_host }} \
       -p {{ db_pull_remote_database_port }} \
       -d {{ db_pull_remote_database_name }} \
+      {{ ['-T']|product(db_pull_exclude_table)|map('join', ' ')|join(' ') }} \
+      {{ ['--exclude-table-data']|product(db_pull_exclude_table_data)|map('join', ' ')|join(' ') }} \
       -f {{ db_pull_remote_backup_path }}/{{ db_pull_remote_database_name }}-{{ ansible_date_time.iso8601 }}.dump

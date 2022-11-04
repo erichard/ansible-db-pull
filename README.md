@@ -33,6 +33,9 @@ db_pull_local_database_port: 5432
 db_pull_database_type: postgres
 
 db_pull_skip_restore: false
+
+db_pull_exclude_table: []
+db_pull_exclude_table_data: []
 ```
 
 Example Playbook

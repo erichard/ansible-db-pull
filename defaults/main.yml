@@ -20,3 +20,6 @@ db_pull_max_age: -1d
 db_pull_database_type: postgres
 
 db_pull_skip_restore: false
+
+db_pull_exclude_table: []
+db_pull_exclude_table_data: []
